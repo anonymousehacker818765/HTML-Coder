@@ -1,12 +1,11 @@
-import enum as em
-
 import cv2
 import mediapipe as mp
 import time
-import autopy
 import math
 import numpy as np
 import pyautogui
+
+pyautogui.FAILSAFE = False
 
 cap = cv2.VideoCapture(0)
 mpDraw = mp.solutions.drawing_utils
@@ -30,13 +29,7 @@ while True:
         for hand1 in result.multi_hand_landmarks:
             mpDraw.draw_landmarks(img, hand1, mpHand.HAND_CONNECTIONS,
                                   mpDraw.DrawingSpec((0, 255, 255), 3, 2))
-            '''for point in mpHand.HandLandmark:
-                nlm = hand1.landmark[point]
-                cx, cy = mpDraw._normalized_to_pixel_coordinates(nlm.x, nlm.y, image_width=640, image_height=480)
 
-                autopy.mouse.move(cx,cy)
-
-                print(nlm)'''
 
             hand_num = 0
             xList = []
@@ -91,7 +84,7 @@ while True:
                 clocY = plocY + (y3 - plocY) / smoothening
 
                 # 7. Move Mouse
-                autopy.mouse.move(clocX, clocY)
+                pyautogui.moveTo(clocX * 2, clocY * 2)
                 cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
                 plocX, plocY = clocX, clocY
 
@@ -103,8 +96,8 @@ while True:
                 time.sleep(1)
                 pyautogui.click(clicks=2)
 
-            #print(fingers)
-            #print(wScr, hScr)
+            # print(fingers)
+            # print(wScr, hScr)
 
             if fingers[0] == 0 and fingers[1] == 1 and fingers[2] == 0 and fingers[3] == 0 and fingers[4] == 1:
                 time.sleep(1)
